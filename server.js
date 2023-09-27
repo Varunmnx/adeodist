@@ -4,12 +4,13 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const sequelize = require("./config/connection.js");
-
+const { createNewLogFile, cleanupOldLogFiles } = require("./logging.js");
 const { seedRoles, createSuperUser } = require("./app/utils/db.seed.js");
 const { User } = require("./app/models/user.model.js");
 const { Role } = require("./app/models/Role.model.js");
 const { Feed } = require("./app/models/Feed.model.js");
-const { UserFeedAccess } = require("./app/models/UserFeedAccess.model.js");
+
+const morgan = require("morgan");
 
 // db initialization
 sequelize
@@ -39,6 +40,10 @@ app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 
+createNewLogFile(app, morgan);
+setInterval(() => createNewLogFile(app, morgan), 5 * 60 * 1000);
+setInterval(() => cleanupOldLogFiles(app, morgan), 30 * 60 * 1000);
+
 // parse requests of content-type - application/json
 app.use(express.json());
 
@@ -59,6 +64,7 @@ app.delete("/delete/db", async (req, res) => {
 
 require("./app/routes/feed.route.js")(app);
 require("./app/routes/user.route.js")(app);
+require("./app/routes/logs.route.js")(app);
 
 // eslint-disable-next-line no-undef
 app.listen(process.env.SERVER_PORT, () => {
