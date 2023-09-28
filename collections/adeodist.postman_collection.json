@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "57549f98-c271-4052-ab96-7f7dfa6f5d90",
+		"name": "adeodist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "21095625"
+	},
+	"item": [
+		{
+			"name": "feed",
+			"item": [
+				{
+					"name": "create feed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"how to use js properly\",\r\n    \"url\":\"link.me\",\r\n    \"description\":\"howsfgsd fshdjhdflhfjl\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ADC}}/feed"
+					},
+					"response": []
+				},
+				{
+					"name": "get feed",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{ADC}}/feed/18"
+					},
+					"response": []
+				},
+				{
+					"name": "delete feed",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{ADC}}/feed/10"
+					},
+					"response": []
+				},
+				{
+					"name": "update feed",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Vunccc\",\r\n    \"url\":\"Varunurl\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ADC}}/feed/13"
+					},
+					"response": []
+				},
+				{
+					"name": "get all feeds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{ADC}}/feed"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "create user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Varun Narayanan\",\r\n    \"role\":\"Admin\",\r\n    \"email\":\"varun.cerah@gm.cm\",\r\n    \"password\":\"Pass@12D\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ADC}}/user/register"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n      \"email\": \"admin@gmail.com\",\r\n      \"password\": \"Admin@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ADC}}/user/login"
+					},
+					"response": []
+				},
+				{
+					"name": "upate a user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role\":\"Admin\",\r\n    \"hasDeleteAccess\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ADC}}/user/update/8"
+					},
+					"response": []
+				},
+				{
+					"name": "delete a user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ADC}}/user/6"
+					},
+					"response": []
+				},
+				{
+					"name": "permit admin to delete a feed",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hasDeleteAccess\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ADC}}/user/allow/8"
+					},
+					"response": []
+				},
+				{
+					"name": "see one user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{ADC}}/user/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "db",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{ADC}}/delete/db"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "feed access",
+			"item": [
+				{
+					"name": "allow  feed access",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"feeds\":[19],\r\n    \"permission\":\"ALL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ADC}}/feed/permit/8"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{ADC}}/logs"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJTdXBlckFkbWluIiwiaWF0IjoxNjk1OTI2NzQ0LCJleHAiOjE2OTYwMTMxNDR9.5PeopLvtFhXGFREMnGa5iy6HNw_ZSTg_SiGv8tI7ZhE"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
