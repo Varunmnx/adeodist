@@ -234,12 +234,21 @@ exports.delete = async (req, res, next) => {
 
     // only super admin can delete users
     else if (role === ROLES.SuperAdmin) {
+      await UserFeedAccess.destroy({ where: { UserId: id } });
+      await User.destroy({ where: { id } });
+      return res
+        .status(RESPONSES.success)
+        .json({ message: "user successfully deleted" });
+    } else if (
+      role === ROLES.Admin &&
+      existingUser.Role.roleType === ROLES.Basic
+    ) {
+      await UserFeedAccess.destroy({ where: { UserId: id } });
       await User.destroy({ where: { id } });
       return res
         .status(RESPONSES.success)
         .json({ message: "user successfully deleted" });
     }
-
     return res
       .status(RESPONSES.failure)
       .json({ message: "deleting user failed" });
