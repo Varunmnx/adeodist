@@ -40,6 +40,17 @@ exports.permit = async (req, res, next) => {
     }
 
     if (role === ROLES.SuperAdmin) {
+      // update existing userfeedaccess or create new one if it is absent
+
+      for (let i = 0; i < feeds.length; i++) {
+        let currentFeed = await Feed.findByPk(feeds[i]);
+        if (!currentFeed) {
+          return res
+            .status(RESPONSES.notFound)
+            .json({ message: `feed with id ${feeds[i]} doesnot exits` });
+        }
+      }
+
       let userFeeds = await Promise.all(
         feeds.map(async (feed) => {
           // Find duplicate entries
@@ -85,7 +96,13 @@ exports.permit = async (req, res, next) => {
     ) {
       let count = 0;
       for (let i = 0; i < feeds.length; i++) {
-        console.log(feeds[i]);
+        let currentFeed = await Feed.findByPk(feeds[i]);
+        if (!currentFeed) {
+          return res.status(RESPONSES.notFound).json({
+            message: `feed with id ${feeds[i]} doesnot exits or you dont have access`,
+          });
+        }
+
         // all feeds associated with a particular user
         let feedsAllowedToUser = await UserFeedAccess.findOne({
           where: { feedId: feeds[i], UserId: user_id },
@@ -133,7 +150,6 @@ exports.permit = async (req, res, next) => {
         where: { UserId: id },
       });
 
-      console.log(allFeedsWithAccessesForTheUser.dataValues);
       return res.json(allFeedsWithAccessesForTheUser);
 
       // check if current user has right permission
