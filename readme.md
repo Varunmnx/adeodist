@@ -48,7 +48,7 @@ run the project
 npm run dev
 ```
 
-# your Admin credentials
+#Super Admin credentials
 ```bash
       email: "admin@gmail.com",
       password: "Admin@123",
