@@ -10,7 +10,10 @@ exports.findOne = async (req, res, next) => {
   try {
     const { id, role } = req.params;
     let user = await User.findByPk(id, {
-      include: [{ model: Role }, { model: Feed, through: UserFeedAccess }],
+      include: [
+        { model: Role },
+        { model: Feed, through: UserFeedAccess, as: "Feeds" },
+      ],
     });
     console.log(user);
     if (!user) {
@@ -264,6 +267,11 @@ exports.allowToDeleteFeed = async (req, res, next) => {
     let { hasDeleteAccess } = req.body;
 
     const existingUser = await User.findByPk(id, { include: "Role" });
+    if (!existingUser) {
+      return res
+        .status(RESPONSES.notFound)
+        .json({ message: "user do not exist on db" });
+    }
     console.log("existingUser", existingUser.dataValues.Role.roleType);
 
     if (!existingUser) {

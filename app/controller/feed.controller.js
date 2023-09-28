@@ -159,11 +159,14 @@ exports.update = async (req, res, next) => {
     let { id } = req.params;
     const { user_id, role } = req.user;
     if (role === ROLES.SuperAdmin) {
-      let updatedFeed = await Feed.update(req.body, {
+      await Feed.update(req.body, {
         where: { id },
         returning: true,
         plain: true,
       });
+
+      let updatedFeed = await Feed.findByPk(id);
+
       return res.status(RESPONSES.success).json(updatedFeed);
     }
     let allowedFeeds = await User.findOne({
