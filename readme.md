@@ -47,3 +47,10 @@ run the project
 ```bash
 npm run dev
 ```
+
+# your Admin credentials
+```bash
+      email: "admin@gmail.com",
+      password: "Admin@123",
+```
+
