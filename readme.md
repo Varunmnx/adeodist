@@ -34,3 +34,16 @@ run mysql docker container using your docker command
 ```bash
  docker run --name my-sql -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD="mypass" mysql:latest
 ```
+create a new database
+```bash
+# login as root user
+mysql -u root -p
+
+# create a database 
+CREATE DATABASE adeodist;
+```
+
+run the project
+```bash
+npm run dev
+```
