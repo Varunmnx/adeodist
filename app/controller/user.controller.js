@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const { ROLES } = require("../common/enum");
 const { Role } = require("../models/Role.model");
 const { Feed } = require("../models/Feed.model");
+const bcrypt = require("bcryptjs");
 
 exports.findOne = async (req, res, next) => {
   try {
@@ -15,7 +16,7 @@ exports.findOne = async (req, res, next) => {
         { model: Feed, through: UserFeedAccess, as: "Feeds" },
       ],
     });
-    console.log(user);
+
     if (!user) {
       return res
         .status(RESPONSES.notFound)
@@ -67,7 +68,12 @@ exports.create = async (req, res, next) => {
     }
 
     let userRole = await Role.findOne({ where: { roleType: role } });
-    let existingUser = await User.findOne({ where: { email, password } });
+
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
+    let existingUser = await User.findOne({
+      where: { email },
+    });
 
     // check if user is existing
     if (existingUser) {
@@ -78,7 +84,7 @@ exports.create = async (req, res, next) => {
     // check if user is super user
     if (currentUserRole === ROLES.SuperAdmin) {
       let newUser = await User.create(
-        { ...req.body, roleId: userRole.id },
+        { ...req.body, password: encryptedPassword, roleId: userRole.id },
         { include: "Role" }
       );
       return res.status(RESPONSES.success).json({ ...newUser.dataValues });
@@ -90,7 +96,7 @@ exports.create = async (req, res, next) => {
       role !== ROLES.Admin
     ) {
       let newUser = await User.create(
-        { ...req.body, roleId: userRole.id },
+        { ...req.body, password: encryptedPassword, roleId: userRole.id },
         { include: "Role" }
       );
       return res.status(RESPONSES.success).json({ ...newUser.dataValues });
@@ -113,23 +119,31 @@ exports.login = async (req, res, next) => {
       return res.status(RE);
     }
     let existingUser = await User.findOne({
-      where: { email, password },
+      where: { email },
       include: "Role",
     });
 
-    let userRole = await Role.findByPk(existingUser.roleId);
-    console.log(userRole);
     if (!existingUser) {
       return res
         .status(RESPONSES.notFound)
         .json({ message: "user does not exist" });
     }
+    let userRole = await Role.findByPk(existingUser.roleId);
 
+    if (
+      existingUser &&
+      !(await bcrypt.compare(password, existingUser.password))
+    ) {
+      return res
+        .status(RESPONSES.failure)
+        .json({ message: "check your password" });
+    }
     const token = jwt.sign(
       {
         user_id: existingUser.id,
         email: existingUser.email,
         role: userRole.roleType,
+        password: existingUser.password,
       },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }

@@ -125,7 +125,7 @@ exports.permit = async (req, res, next) => {
             where: { feedId: feeds[i], UserId: id },
           });
           // if permission is not created create one
-          if (basicUserAccess.length === 0) {
+          if (!basicUserAccess || basicUserAccess.length === 0) {
             console.log("permission does not exist");
             count++;
             await UserFeedAccess.create({

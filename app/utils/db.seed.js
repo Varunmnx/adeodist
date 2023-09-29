@@ -1,6 +1,8 @@
 const { User } = require("../models/user.model");
 const { Role } = require("../models/Role.model");
 const { defaultRoles, ROLES } = require("../common/enum.js");
+const bcrypt = require("bcryptjs");
+
 exports.seedRoles = async () => {
   let RolesInDB = await Role.findAll();
   if (RolesInDB.length === 0) {
@@ -20,10 +22,12 @@ exports.createSuperUser = async () => {
     where: { roleId: superAdminRole.id },
   });
   if (!superAdmin) {
+    let password = "Admin@123";
+    let encryptedPassword = await bcrypt.hash(password, 10);
     await User.create({
       name: "Admin",
       email: "admin@gmail.com",
-      password: "Admin@123",
+      password: encryptedPassword,
       roleId: superAdminRole.id,
     });
   } else {
